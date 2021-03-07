@@ -7,7 +7,7 @@ async function bootstrap() {
 
   /* SWAGGER */
   const options = new DocumentBuilder()
-    .setTitle('Monitoring Server')
+    .setTitle('IoT Board Backend')
     .setDescription('NestJS server used for storing data coming from Arduino/ESP8266 based sensors. I.E. DHT22 sensor')
     .setVersion('1.0.0')
     .addTag('projects')
