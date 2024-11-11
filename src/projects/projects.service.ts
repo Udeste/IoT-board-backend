@@ -1,38 +1,39 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProjectDto, ProjectDto } from '../dtos/project.dto';
-import { genRandomId } from '../utils/id';
+import { CreateProjectDto } from './project.dto';
+import { v4 as uuidv4 } from 'uuid';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Project } from './project.entity';
 
 @Injectable()
 export class ProjectsService {
-  private projects: ProjectDto[] = [];
+  constructor(@InjectRepository(Project)
+              private projectRepository: Repository<Project>,) {}
 
-  async getProjectById(projId: number): Promise<ProjectDto> {
-    return this.projects.find(({ id }) => id === projId);
+  async getProjectById(id: string): Promise<Project> {
+    return this.projectRepository.findOneBy({ id });
   }
 
-  async getAllProjects(): Promise<ProjectDto[]> {
-    return this.projects;
+  async getAllProjects(): Promise<Project[]> {
+    return this.projectRepository.find();
   }
 
-  async createOne(createProjectDto: CreateProjectDto): Promise<ProjectDto> {
-    const id = genRandomId();
-    const newProject = {
-      ...createProjectDto,
-      id,
-      sensors: [],
-    };
-    this.projects.push(newProject);
-    return newProject;
+  async createOne(createProjectDto: CreateProjectDto): Promise<Project> {
+    const id = uuidv4();
+    const newProject = new Project()
+    newProject.id = id
+    newProject.description = createProjectDto.description
+    newProject.name = createProjectDto.name
+  
+    return this.projectRepository.save(newProject)
   }
 
-  async deleteOne(projId: number): Promise<ProjectDto> {
-    const index = this.projects.findIndex(({ id }) => id === projId);
-    return this.projects.splice(index, 1)[0];
+  async deleteOne(projId: string): Promise<boolean> {
+    await this.projectRepository.delete(projId);
+    return true
   }
 
-  async assignSensor(projectID: number, sensorId: number): Promise<ProjectDto> {
-    const project = this.projects.find(({ id }) => id === projectID);
-    project.sensors.push(sensorId);
-    return project;
+  async assignSensor(projectID: string, sensorId: string): Promise<Project> {
+    return null;
   }
 }

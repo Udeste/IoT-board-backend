@@ -1,12 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class SensorDto {
-  @ApiProperty()
-  readonly id: number;
+export class CreateProjectDto {
   @ApiProperty()
   name: string;
   @ApiProperty()
   description: string;
-  @ApiProperty()
-  projectId: number;
 }
