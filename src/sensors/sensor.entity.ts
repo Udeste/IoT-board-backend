@@ -9,6 +9,6 @@ export class Sensor {
   name: string;
   @Column()
   description: string;
-  @ManyToOne(() => Project, project => project.sensors)
+  @ManyToOne(() => Project, project => project.sensors, { onDelete: 'CASCADE' })
   project: Project;
 }
