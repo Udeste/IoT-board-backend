@@ -1,0 +1,23 @@
+meta {
+  name: Create Sensor
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://{{endPoint}}/sensors
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "newSensor",
+    "description": "my new sensor",
+    "projectId": "{{projectID}}"
+  }
+}
+
+script:post-response {
+  bru.setEnvVar('sensorID',res.body.id)
+}

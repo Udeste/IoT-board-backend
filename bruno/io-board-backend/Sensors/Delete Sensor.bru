@@ -1,0 +1,18 @@
+meta {
+  name: Delete Sensor
+  type: http
+  seq: 5
+}
+
+delete {
+  url: http://{{endPoint}}/sensors/{{sensorID}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "newProject",
+    "description": "my new project"
+  }
+}

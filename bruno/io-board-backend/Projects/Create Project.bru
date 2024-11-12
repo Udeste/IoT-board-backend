@@ -1,0 +1,22 @@
+meta {
+  name: Create Project
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://{{endPoint}}/projects
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "newProject",
+    "description": "my new project"
+  }
+}
+
+script:post-response {
+  bru.setEnvVar('projectID',res.body.id)
+}
