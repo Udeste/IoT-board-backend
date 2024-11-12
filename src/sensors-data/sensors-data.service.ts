@@ -4,7 +4,7 @@ import {
   QuerySensorDataDto,
   SensorDataDto,
   SensorDataValueDto,
-} from '../dtos/sensor-data.dto';
+} from './sensor-data.dto';
 
 @Injectable()
 export class SensorsDataService {

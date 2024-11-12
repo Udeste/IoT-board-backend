@@ -5,18 +5,16 @@ import {
   QuerySensorDataDto,
   SensorDataDto,
   SensorDataValueDto,
-} from '../dtos/sensor-data.dto';
+} from './sensor-data.dto';
 import { SensorsDataService } from './sensors-data.service';
 
 @ApiTags('sensors-data')
 @Controller('sensors-data')
 export class SensorsDataController {
-  constructor(private readonly sensorsDataService: SensorsDataService) {}
+  constructor(private readonly sensorsDataService: SensorsDataService) { }
 
   @Get('query')
-  querySensorData(
-    @Query() query: QuerySensorDataDto,
-  ): Observable<SensorDataValueDto[]> {
+  querySensorData(@Query() query: QuerySensorDataDto): Observable<SensorDataValueDto[]> {
     return this.sensorsDataService.querySensorData(query);
   }
 
