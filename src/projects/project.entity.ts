@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, PrimaryColumn } from 'typeorm';
+import { Sensor } from '../sensors/sensor.entity';
+import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class Project {
@@ -8,6 +9,6 @@ export class Project {
   name: string;
   @Column()
   description: string;
-  // @OneToMany(type => Photo, photo => photo.user)
-//   sensors: Sensor[];
+  @OneToMany(() => Sensor, sensor => sensor.project)
+  sensors: Sensor[];
 }

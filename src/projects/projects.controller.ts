@@ -3,6 +3,7 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateProjectDto } from './project.dto';
 import { ProjectsService } from './projects.service';
 import { Project } from './project.entity';
+import { DeleteResult } from 'typeorm';
 
 @ApiTags('projects')
 @Controller('projects')
@@ -28,7 +29,7 @@ export class ProjectsController {
   }
 
   @Delete(':id')
-  async deleteOne(@Param('id') id: string): Promise<boolean> {
+  async deleteOne(@Param('id') id: string): Promise<DeleteResult> {
     return this.projectsService.deleteOne(id);
   }
 }

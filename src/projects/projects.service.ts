@@ -1,21 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { CreateProjectDto } from './project.dto';
 import { v4 as uuidv4 } from 'uuid';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Project } from './project.entity';
 
 @Injectable()
 export class ProjectsService {
   constructor(@InjectRepository(Project)
-              private projectRepository: Repository<Project>,) {}
+              private projectRepository: Repository<Project>) {}
 
   async getProjectById(id: string): Promise<Project> {
     return this.projectRepository.findOneBy({ id });
   }
 
   async getAllProjects(): Promise<Project[]> {
-    return this.projectRepository.find();
+    return this.projectRepository.find({ loadRelationIds: true });
   }
 
   async createOne(createProjectDto: CreateProjectDto): Promise<Project> {
@@ -28,12 +28,7 @@ export class ProjectsService {
     return this.projectRepository.save(newProject)
   }
 
-  async deleteOne(projId: string): Promise<boolean> {
-    await this.projectRepository.delete(projId);
-    return true
-  }
-
-  async assignSensor(projectID: string, sensorId: string): Promise<Project> {
-    return null;
+  async deleteOne(projId: string): Promise<DeleteResult> {
+    return this.projectRepository.delete(projId);
   }
 }

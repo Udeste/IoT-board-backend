@@ -1,13 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ProjectsModule } from './projects/projects.module';
 import { SensorsDataModule } from './sensors-data/sensors-data.module';
-import { SensorsController } from './sensors/sensors.controller';
 import { SensorsModule } from './sensors/sensors.module';
-import { SensorsService } from './sensors/sensors.service';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { Project } from './projects/project.entity';
+import { Sensor } from './sensors/sensor.entity';
 
 @Module({
   imports: [
@@ -23,11 +22,9 @@ import { Project } from './projects/project.entity';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [Project],
+      entities: [Project, Sensor],
       synchronize: true,
     }),
   ],
-  controllers: [SensorsController],
-  providers: [SensorsService]
 })
 export class AppModule {}
