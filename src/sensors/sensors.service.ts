@@ -1,35 +1,45 @@
 import { Injectable } from '@nestjs/common';
-import { SensorDto } from 'src/dtos/sensor.dto';
 import { ProjectsService } from '../projects/projects.service';
-import { genRandomId } from 'src/utils/id';
+import { v4 as uuidv4 } from 'uuid';
+import { InjectRepository } from '@nestjs/typeorm';
+import { DeleteResult, Repository } from 'typeorm';
+import { Sensor } from './sensor.entity';
+import { CreateSensorDto } from './sensor.dto';
 
 @Injectable()
 export class SensorsService {
-  private sensors: SensorDto[] = [];
+  constructor(@InjectRepository(Sensor)
+              private sensorRepository: Repository<Sensor>,
+              private readonly projectsService: ProjectsService,
+  ) { }
 
-  constructor(private readonly projectsService: ProjectsService) {}
-
-  async getSensorById(projId: number): Promise<SensorDto> {
-    return this.sensors.find(({ id }) => id === projId);
+  async getSensorById(id: string): Promise<Sensor> {
+    return this.sensorRepository.findOneBy({ id });
   }
 
-  async getAllsensors(): Promise<SensorDto[]> {
-    return this.sensors;
+  async getSensorByProjectId(projectId: string): Promise<Sensor> {
+    return this.sensorRepository.findOneBy({ project: { id: projectId} });
+  }
+  
+  async getAllsensors(): Promise<Sensor[]> {
+    return this.sensorRepository.find();
   }
 
-  async createOne(sensorDto: SensorDto): Promise<SensorDto> {
-    const id = genRandomId();
-    const newSensor = {
-      ...sensorDto,
-      id,
-    };
-    this.sensors.push(newSensor);
-    await this.projectsService.assignSensor(newSensor.projectId, newSensor.id);
-    return newSensor;
+  async createOne(createSensorDto: CreateSensorDto): Promise<Sensor> {
+    const id = uuidv4();
+    const newSensor = new Sensor()
+    newSensor.id = id
+    newSensor.description = createSensorDto.description
+    newSensor.name = createSensorDto.name
+
+    const project = await this.projectsService.getProjectById(createSensorDto.projectId)
+    newSensor.project = project
+  
+    const createdSensor = await this.sensorRepository.save(newSensor)
+    return createdSensor
   }
 
-  async deleteOne(projId: number): Promise<SensorDto> {
-    const index = this.sensors.findIndex(({ id }) => id === projId);
-    return this.sensors.splice(index, 1)[0];
+  async deleteOne(projId: string): Promise<DeleteResult> {
+    return this.sensorRepository.delete(projId);
   }
 }

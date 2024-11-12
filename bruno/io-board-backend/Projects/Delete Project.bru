@@ -1,0 +1,18 @@
+meta {
+  name: Delete Project
+  type: http
+  seq: 4
+}
+
+delete {
+  url: http://{{endPoint}}/projects/{{projectID}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "newProject",
+    "description": "my new project"
+  }
+}
