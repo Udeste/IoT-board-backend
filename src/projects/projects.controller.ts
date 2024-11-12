@@ -1,9 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreateProjectDto } from './project.dto';
+import { CreateProjectDto, UpdateProjectDto } from './project.dto';
 import { ProjectsService } from './projects.service';
 import { Project } from './project.entity';
-import { DeleteResult } from 'typeorm';
+import { DeleteResult, UpdateResult } from 'typeorm';
 
 @ApiTags('projects')
 @Controller('projects')
@@ -26,6 +26,12 @@ export class ProjectsController {
   @ApiResponse({ description: 'The created project', type: Project })
   async createOne(@Body() createProjectDto: CreateProjectDto): Promise<Project> {
     return this.projectsService.createOne(createProjectDto);
+  }
+
+  @Put()
+  @ApiResponse({ description: 'The updated project', type: Project })
+  async updateOne(@Body() updateProjectDto: UpdateProjectDto): Promise<UpdateResult> {
+    return this.projectsService.updateOne(updateProjectDto);
   }
 
   @Delete(':id')

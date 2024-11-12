@@ -6,3 +6,12 @@ export class CreateProjectDto {
   @ApiProperty()
   description: string;
 }
+
+export class UpdateProjectDto {
+  @ApiProperty({ required: true })
+  id: string;
+  @ApiProperty({ required: false })
+  name?: string;
+  @ApiProperty({ required: false })
+  description?: string;
+}
