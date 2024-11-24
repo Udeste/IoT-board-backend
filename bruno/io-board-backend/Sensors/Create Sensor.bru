@@ -12,9 +12,19 @@ post {
 
 body:json {
   {
-    "name": "newSensor",
-    "description": "my new sensor",
-    "projectId": "{{projectID}}"
+    "name": "esp12e",
+    "description": "esp12e bedroom",
+    "projectId": "{{projectID}}",
+    "measurements": [
+      "temperature",
+      "humidity",
+      "heatIndex"
+    ],
+    "tags": {
+      "room": "bedroom",
+      "location": "Salerno",
+      "device": "bettopi2"
+    }
   }
 }
 

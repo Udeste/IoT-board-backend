@@ -24,6 +24,7 @@ export class ProjectsService {
     newProject.id = id
     newProject.description = createProjectDto.description
     newProject.name = createProjectDto.name
+    newProject.topic = createProjectDto.topic
   
     return this.projectRepository.save(newProject)
   }

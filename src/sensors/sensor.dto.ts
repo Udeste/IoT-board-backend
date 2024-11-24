@@ -7,4 +7,8 @@ export class CreateSensorDto {
   description: string;
   @ApiProperty()
   projectId: string;
+  @ApiProperty()
+  tags: { [key: string]: string }
+  @ApiProperty()
+  measurements: Array<string>;
 }
