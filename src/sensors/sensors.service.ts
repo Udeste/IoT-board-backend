@@ -31,6 +31,8 @@ export class SensorsService {
     newSensor.id = id
     newSensor.description = createSensorDto.description
     newSensor.name = createSensorDto.name
+    newSensor.tags = createSensorDto.tags
+    newSensor.measurements = createSensorDto.measurements
 
     const project = await this.projectsService.getProjectById(createSensorDto.projectId)
     newSensor.project = project

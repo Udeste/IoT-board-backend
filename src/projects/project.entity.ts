@@ -1,8 +1,16 @@
-import { Sensor } from '../sensors/sensor.entity';
+import { Sensor, ISensor } from '../sensors/sensor.entity';
 import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm';
 
+export interface IProject {
+  id?: string;
+  name?: string;
+  description?: string;
+  sensors?: ISensor[];
+  topic?: string
+}
+
 @Entity()
-export class Project {
+export class Project implements IProject {
   @PrimaryColumn({ length:200 })
   id: string;
   @Column()
@@ -11,4 +19,6 @@ export class Project {
   description: string;
   @OneToMany(() => Sensor, sensor => sensor.project)
   sensors: Sensor[];
+  @Column()
+  topic: string
 }
