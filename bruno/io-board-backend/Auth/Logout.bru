@@ -1,0 +1,16 @@
+meta {
+  name: Logout
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://{{endPoint}}/auth/logout
+  body: none
+  auth: inherit
+}
+
+script:post-response {
+  bru.setEnvVar('jwtAccessToken',res.body.accessToken)
+  // bru.setEnvVar('jwtRefreshToken',res.body.refreshToken)
+}

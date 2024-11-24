@@ -1,0 +1,16 @@
+meta {
+  name: RefreshToken
+  type: http
+  seq: 3
+}
+
+get {
+  url: http://{{endPoint}}/auth/refresh
+  body: none
+  auth: none
+}
+
+script:post-response {
+  bru.setEnvVar('jwtAccessToken',res.body.accessToken)
+  // bru.setEnvVar('jwtRefreshToken',res.body.refreshToken)
+}
