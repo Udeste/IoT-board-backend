@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ProjectsModule } from '../projects/projects.module';
 import { SensorsController } from './sensors.controller';
 import { SensorsService } from './sensors.service';
-import { Sensor } from './sensor.entity';
+import { Sensor } from 'libs/shared/entities/sensor.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
@@ -11,4 +11,4 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   providers: [SensorsService],
   exports: [SensorsService]
 })
-export class SensorsModule {}
+export class SensorsModule { }

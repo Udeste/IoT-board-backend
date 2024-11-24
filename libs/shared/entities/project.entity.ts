@@ -1,4 +1,4 @@
-import { Sensor, ISensor } from '../sensors/sensor.entity';
+import { Sensor, ISensor } from './sensor.entity';
 import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm';
 
 export interface IProject {
