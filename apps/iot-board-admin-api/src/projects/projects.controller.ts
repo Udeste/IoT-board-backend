@@ -1,8 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreateProjectDto, UpdateProjectDto } from './project.dto';
+import { CreateProjectDto, UpdateProjectDto } from 'libs/shared/dtos/project.dto';
 import { ProjectsService } from './projects.service';
-import { Project } from './project.entity';
+import { Project } from 'libs/shared/entities/project.entity';
 import { DeleteResult, UpdateResult } from 'typeorm';
 
 @ApiTags('projects')

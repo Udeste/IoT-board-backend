@@ -1,8 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SensorsService } from './sensors.service';
-import { CreateSensorDto } from './sensor.dto';
-import { Sensor } from './sensor.entity';
+import { CreateSensorDto } from 'libs/shared/dtos/sensor.dto';
+import { Sensor } from 'libs/shared/entities/sensor.entity';
 import { DeleteResult } from 'typeorm';
 
 @ApiTags('sensors')

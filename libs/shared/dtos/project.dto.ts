@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IProject } from './project.entity';
+import { IProject } from '../entities/project.entity';
 
 export class CreateProjectDto implements IProject {
   @ApiProperty()

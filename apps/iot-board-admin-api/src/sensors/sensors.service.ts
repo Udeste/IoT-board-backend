@@ -3,8 +3,8 @@ import { ProjectsService } from '../projects/projects.service';
 import { v4 as uuidv4 } from 'uuid';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
-import { Sensor } from './sensor.entity';
-import { CreateSensorDto } from './sensor.dto';
+import { Sensor } from 'libs/shared/entities/sensor.entity';
+import { CreateSensorDto } from 'libs/shared/dtos/sensor.dto';
 
 @Injectable()
 export class SensorsService {

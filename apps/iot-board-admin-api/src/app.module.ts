@@ -4,8 +4,8 @@ import { SensorsModule } from './sensors/sensors.module';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { Project } from './projects/project.entity';
-import { Sensor } from './sensors/sensor.entity';
+import { Project } from 'libs/shared/entities/project.entity';
+import { Sensor } from 'libs/shared/entities/sensor.entity';
 
 @Module({
   imports: [
