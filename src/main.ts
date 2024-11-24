@@ -1,11 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import * as cookieParser from 'cookie-parser'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
-  app.enableCors({origin: process.env.ORIGINS})
+  app.use(cookieParser());
+  app.enableCors({origin: process.env.ORIGINS, credentials: true})
   /* SWAGGER */
   const options = new DocumentBuilder()
     .setTitle('IoT Board Backend')
