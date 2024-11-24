@@ -1,6 +1,9 @@
 # Use the official Node.js image as the base image
 FROM node:lts-alpine
 
+ARG APP_NAME
+ARG APP_PORT
+
 # Set the working directory inside the container
 WORKDIR /usr/src/app
 
@@ -14,10 +17,11 @@ RUN corepack enable pnpm && pnpm install
 COPY . .
 
 # Build the NestJS application
-RUN pnpm run build
+RUN pnpm run build -- ${APP_NAME}
+RUN mv dist/apps/${APP_NAME} dist/app
 
 # Expose the application port
-EXPOSE 3000
+EXPOSE ${APP_PORT}
 
 # Command to run the application
-CMD ["node", "dist/main"]
+CMD ["node", "dist/app/main"]

@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { ProjectsModule } from './projects/projects.module';
-import { SensorsDataModule } from './sensors-data/sensors-data.module';
 import { SensorsModule } from './sensors/sensors.module';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -13,7 +12,6 @@ import { Sensor } from './sensors/sensor.entity';
     ConfigModule.forRoot(),
     ProjectsModule, 
     SensorsModule, 
-    SensorsDataModule, 
     AuthModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
