@@ -1,4 +1,30 @@
 {
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src"
+  "sourceRoot": "apps/iot-board-admin-api/src",
+  "monorepo": true,
+  "root": "apps/iot-board-admin-api",
+  "compilerOptions": {
+    "webpack": true,
+    "tsConfigPath": "apps/iot-board-admin-api/tsconfig.app.json"
+  },
+  "projects": {
+    "iot-board-admin-api": {
+      "type": "application",
+      "root": "apps/iot-board-admin-api",
+      "entryFile": "main",
+      "sourceRoot": "apps/iot-board-admin-api/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/iot-board-admin-api/tsconfig.app.json"
+      }
+    },
+    "iot-board-mqtt": {
+      "type": "application",
+      "root": "apps/iot-board-mqtt",
+      "entryFile": "main",
+      "sourceRoot": "apps/iot-board-mqtt/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/iot-board-mqtt/tsconfig.app.json"
+      }
+    }
+  }
 }
