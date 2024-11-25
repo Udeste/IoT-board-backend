@@ -4,6 +4,7 @@ import { CreateProjectDto, UpdateProjectDto } from 'libs/shared/dtos/project.dto
 import { ProjectsService } from './projects.service';
 import { Project } from 'libs/shared/entities/project.entity';
 import { DeleteResult, UpdateResult } from 'typeorm';
+import { MessagePattern } from '@nestjs/microservices';
 
 @ApiTags('projects')
 @Controller('projects')
@@ -12,12 +13,14 @@ export class ProjectsController {
 
   @Get()
   @ApiResponse({ description: 'A list of projects', type: [Project] })
+  @MessagePattern({ cmd: 'projects:getAll' })
   async getAll(): Promise<Project[]> {
     return this.projectsService.getAllProjects();
   }
 
   @Get(':id')
   @ApiResponse({ description: 'A single project', type: Project })
+  @MessagePattern({ cmd: 'projects:getbyId' })
   async getbyId(@Param('id') id: string): Promise<Project> {
     return this.projectsService.getProjectById(id);
   }

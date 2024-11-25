@@ -4,6 +4,7 @@ import { SensorsService } from './sensors.service';
 import { CreateSensorDto } from 'libs/shared/dtos/sensor.dto';
 import { Sensor } from 'libs/shared/entities/sensor.entity';
 import { DeleteResult } from 'typeorm';
+import { MessagePattern } from '@nestjs/microservices';
 
 @ApiTags('sensors')
 @Controller('sensors')
@@ -12,12 +13,14 @@ export class SensorsController {
 
   @Get()
   @ApiResponse({ description: 'A list of sensors', type: [Sensor] })
+  @MessagePattern({ cmd: 'sensors:getAll' })
   async getAll(): Promise<Sensor[]> {
     return this.sensorsService.getAllsensors();
   }
 
   @Get(':id')
   @ApiResponse({ description: 'A single sensor', type: Sensor })
+  @MessagePattern({ cmd: 'sensors:getbyId' })
   async getbyId(@Param('id') id: string): Promise<Sensor> {
     return this.sensorsService.getSensorById(id);
   }
