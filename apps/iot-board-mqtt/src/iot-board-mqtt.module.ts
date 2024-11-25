@@ -1,10 +1,21 @@
 import { Module } from '@nestjs/common';
-import { IotBoardMqttController } from './iot-board-mqtt.controller';
-import { IotBoardMqttService } from './iot-board-mqtt.service';
+import { ConfigModule } from '@nestjs/config';
+import { IotBoardMqttService } from './iot-board-mqtt.service'
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
-  imports: [],
-  controllers: [IotBoardMqttController],
+  imports: [
+    ConfigModule.forRoot(),
+    ClientsModule.register([{
+      name: 'ADMIN_API_SERVICE',
+      transport: Transport.TCP,
+      options: {
+        host: process.env.ADMIN_API_MS_HOST || 'localhost',
+        port: Number(process.env.ADMIN_API_MS_PORT) || 4000
+      }
+    }]),
+  ],
+  controllers: [],
   providers: [IotBoardMqttService],
 })
-export class IotBoardMqttModule {}
+export class IotBoardMqttModule { }
