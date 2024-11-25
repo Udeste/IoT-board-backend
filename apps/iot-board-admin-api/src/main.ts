@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser'
+import { Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -19,6 +20,15 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(process.env.PORT || 3000);
+  app.connectMicroservice({
+    transport: Transport.TCP,
+    options: {
+      host: process.env.ADMIN_API_MS_HOST || 'localhost',
+      port: Number(process.env.ADMIN_API_MS_PORT) || 4000
+    }
+  })
+
+  await app.startAllMicroservices();
+  await app.listen(Number(process.env.APP_PORT) || 3000);
 }
 bootstrap();
