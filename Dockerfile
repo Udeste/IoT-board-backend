@@ -2,7 +2,6 @@
 FROM node:lts-alpine
 
 ARG APP_NAME
-ARG APP_PORT
 
 # Set the working directory inside the container
 WORKDIR /usr/src/app
@@ -19,9 +18,6 @@ COPY . .
 # Build the NestJS application
 RUN pnpm run build -- ${APP_NAME}
 RUN mv dist/apps/${APP_NAME} dist/app
-
-# Expose the application port
-EXPOSE ${APP_PORT}
 
 # Command to run the application
 CMD ["node", "dist/app/main"]

@@ -25,6 +25,13 @@ export class SensorsController {
     return this.sensorsService.getSensorById(id);
   }
 
+  @Get(':name')
+  @ApiResponse({ description: 'A single sensor', type: Sensor })
+  @MessagePattern({ cmd: 'sensors:getbyName' })
+  async getbyName(@Param('name') name: string): Promise<Sensor> {
+    return this.sensorsService.getSensorByName(name);
+  }
+
   @Get('/by-project/:projectId')
   @ApiResponse({ description: 'A single sensor', type: Sensor })
   async getbyProjectID(@Param('projectId') projectId: string): Promise<Sensor> {

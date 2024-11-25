@@ -17,6 +17,10 @@ export class SensorsService {
     return this.sensorRepository.findOneBy({ id });
   }
 
+  async getSensorByName(name: string): Promise<Sensor> {
+    return this.sensorRepository.findOneBy({ name });
+  }
+
   async getSensorByProjectId(projectId: string): Promise<Sensor> {
     return this.sensorRepository.findOneBy({ project: { id: projectId} });
   }
