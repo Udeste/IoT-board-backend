@@ -8,11 +8,16 @@ on:
 
 jobs:
 
-  build:
-
+  build-admin-api:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag iot-board-admin-api:$(date +%s)
+    - name: Build the Docker image for the admin-api service
+      run: docker build . --file Dockerfile --tag iot-board-admin-api:$(date +%s) --build-arg APP_NAME=iot-board-admin-api
+  
+  build-mqtt:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Docker image for the mqtt service
+      run: docker build . --file Dockerfile --tag iot-board-mqtt:$(date +%s) --build-arg APP_NAME=iot-board-mqtt
