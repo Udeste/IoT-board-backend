@@ -4,6 +4,8 @@ import { firstValueFrom } from 'rxjs';
 import { connect } from 'mqtt';
 import { ConfigService } from '@nestjs/config';
 import { IProject } from 'libs/shared/entities/project.entity';
+import { IotBoardInfluxervice } from './iot-board-influx.service';
+import { ISensorMessage } from 'libs/shared/types/sensorMessage.type';
 
 
 @Injectable()
@@ -12,7 +14,8 @@ export class IotBoardMqttService {
 
   constructor(
     @Inject('ADMIN_API_SERVICE') private adminApiService: ClientProxy,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private influxDbService: IotBoardInfluxervice
   ) {
     this.init()
   }
@@ -23,6 +26,10 @@ export class IotBoardMqttService {
     mqttClient.on('connect', async () => {
       console.log('Mqtt connected to', this.mqttHost);
       const projects: IProject[] = await firstValueFrom(this.adminApiService.send({ cmd: 'projects:getAll' }, {}))
+
+      if(projects.length === 0) return 
+
+      await Promise.all(projects.map(({ topic }) => this.influxDbService.checkAndCreateBucket(topic)))
 
       mqttClient.subscribe(projects.map(({ topic }) => topic), (err, grant) => {
         if (!err) console.log('Subscribed to:', grant)
@@ -37,7 +44,7 @@ export class IotBoardMqttService {
 
   async handleSensorMessage(topic: string, message: string) {
     try {
-      const data = JSON.parse(message)
+      const data = JSON.parse(message) as ISensorMessage
       const sensor = await firstValueFrom(this.adminApiService.send({ cmd: 'sensors:getbyName' }, data.device))
 
       if (!sensor) {
@@ -46,10 +53,10 @@ export class IotBoardMqttService {
       }
       const payload = sensor.measurements.reduce((p, meas) => ({
         ...p,
-        [meas]: data[meas]
-      }), { tags: sensor.tags })
+        [meas]: (data.measurements && data.measurements[meas]) || -1
+      }), { })
 
-      console.log({ topic, sensor: sensor.name, payload, data })
+      this.influxDbService.saveData(topic, payload, sensor.tags)
     } catch (e) {
       console.error(e)
     }

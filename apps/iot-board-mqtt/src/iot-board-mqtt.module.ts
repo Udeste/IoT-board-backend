@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { IotBoardMqttService } from './iot-board-mqtt.service'
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { IotBoardInfluxervice } from './iot-board-influx.service';
 
 @Module({
   imports: [
@@ -16,6 +17,6 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
     }]),
   ],
   controllers: [],
-  providers: [IotBoardMqttService],
+  providers: [IotBoardMqttService, IotBoardInfluxervice],
 })
 export class IotBoardMqttModule { }
