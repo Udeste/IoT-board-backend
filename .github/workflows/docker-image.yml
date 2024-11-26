@@ -8,14 +8,14 @@ on:
 
 jobs:
 
-  build-admin-api:
+  build-admin-api-microservice:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image for the admin-api service
       run: docker build . --file Dockerfile --tag iot-board-admin-api:$(date +%s) --build-arg APP_NAME=iot-board-admin-api
   
-  build-mqtt:
+  build-mqtt-microservice:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
