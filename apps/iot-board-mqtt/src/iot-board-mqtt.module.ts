@@ -11,8 +11,8 @@ import { IotBoardInfluxervice } from './iot-board-influx.service';
       name: 'ADMIN_API_SERVICE',
       transport: Transport.TCP,
       options: {
-        host: process.env.ADMIN_API_MS_HOST || 'localhost',
-        port: Number(process.env.ADMIN_API_MS_PORT) || 4000
+        host: process.env.IOTBRD_ADMIN_API_MS_HOST || 'localhost',
+        port: Number(process.env.IOTBRD_ADMIN_API_MS_PORT) || 4000
       }
     }]),
   ],

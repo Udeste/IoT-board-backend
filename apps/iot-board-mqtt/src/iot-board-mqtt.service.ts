@@ -10,7 +10,7 @@ import { ISensorMessage } from 'libs/shared/types/sensorMessage.type';
 
 @Injectable()
 export class IotBoardMqttService {
-  private readonly mqttHost = this.configService.get<string>('MQTT_BROKER_HOST', 'localhost:1883')
+  private readonly mqttHost = this.configService.get<string>('IOTBRD_SENSORS_API_MQTT_BROKER_HOST', 'localhost:1883')
 
   constructor(
     @Inject('ADMIN_API_SERVICE') private adminApiService: ClientProxy,

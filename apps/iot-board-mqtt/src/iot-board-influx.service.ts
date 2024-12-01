@@ -6,9 +6,9 @@ import { OrgsAPI, BucketsAPI } from '@influxdata/influxdb-client-apis'
 
 @Injectable()
 export class IotBoardInfluxervice {
-  private readonly influxHost = this.configService.get<string>('INFLUX_URL', 'https://localhost:8086')
-  private readonly influxToken = this.configService.get<string>('INFLUX_TOKEN', '')
-  private readonly influxOrg = this.configService.get<string>('INFLUX_ORG', 'iot-board')
+  private readonly influxHost = this.configService.get<string>('IOTBRD_SENSORS_API_INFLUX_URL', 'https://localhost:8086')
+  private readonly influxToken = this.configService.get<string>('IOTBRD_SENSORS_API_INFLUX_TOKEN', '')
+  private readonly influxOrg = this.configService.get<string>('IOTBRD_SENSORS_API_INFLUX_ORG', 'iot-board')
   private influxOrgId = ''
   private influxDB: InfluxDB;
   private orgsAPI: OrgsAPI;
