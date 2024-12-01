@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Create and publish a Docker image
 
 on:
   push:
@@ -6,15 +6,27 @@ on:
   pull_request:
     branches: [ "main" ]
 
+env:
+  REGISTRY: ghcr.io
+  # IMAGE_NAME: ${{ github.repository }}
+
 jobs:
 
   build-admin-api-microservice:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
     steps:
     - uses: actions/checkout@v4
-    - name: Build the Docker image for the admin-api service
-      run: docker build . --file Dockerfile --tag iot-board-admin-api:$(date +%s) --build-arg APP_NAME=iot-board-admin-api
-  
+    - name: Build and publish the Docker image for the admin-api service
+      run: |
+        docker login --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+        docker build . --file Dockerfile --tag ${{ env.REGISTRY }}/${{ github.actor }}/iot-board-admin-api:${{ github.ref_name }} --build-arg APP_NAME=iot-board-admin-api
+        docker push ${{ env.REGISTRY }}/${{ github.actor }}/iot-board-admin-api:${{ github.ref_name }}
+
   build-sensors-api-microservice:
     runs-on: ubuntu-latest
     steps:
