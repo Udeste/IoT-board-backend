@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { Project } from 'libs/shared/entities/project.entity';
 import { Sensor } from 'libs/shared/entities/sensor.entity';
+import { TransporterModule } from 'libs/shared/modules/transporter/transporter.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { Sensor } from 'libs/shared/entities/sensor.entity';
     ProjectsModule, 
     SensorsModule, 
     AuthModule,
+    TransporterModule.forRoot('iotbrd-admin-client'),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DB_HOST,
@@ -22,7 +24,7 @@ import { Sensor } from 'libs/shared/entities/sensor.entity';
       database: process.env.DB_DATABASE,
       entities: [Project, Sensor],
       synchronize: true,
-    }),
+    })
   ],
 })
 export class AppModule {}

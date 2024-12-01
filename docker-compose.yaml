@@ -1,0 +1,52 @@
+version: '3'
+services:
+  mariadb:
+    image: mariadb:11
+    container_name: mariadb
+    env_file: .env.docker
+    ports:
+      - 3306:3306
+    restart: unless-stopped
+  influxdb2:
+    image: influxdb:2
+    container_name: influxdb2
+    ports:
+      - 8086:8086
+    env_file: .env.docker
+    restart: unless-stopped
+    volumes:
+      - type: volume
+        source: influxdb2-data
+        target: /var/lib/influxdb2
+      - type: volume
+        source: influxdb2-config
+        target: /etc/influxdb2
+  mqtt-broker:
+    image: emqx:latest
+    container_name: mqtt-broker
+    env_file: .env.docker
+    restart: unless-stopped
+    ports:
+      - 1883:1883
+      - 8083:8083
+      # - 8084:8084
+      # - 8883:8883
+      - 18083:18083
+  admin-api:
+    image: iot-board-admin-api:latest
+    container_name: admin-api
+    env_file: .env.docker
+    ports:
+      - 3000:3000
+      - 4000:4000
+    restart: unless-stopped
+  sensors-api:
+    image: iot-board-sensors-api:latest
+    container_name: sensors-api
+    env_file: .env.docker
+    restart: unless-stopped
+volumes:
+  influxdb2-data:
+  influxdb2-config:
+
+

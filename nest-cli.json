@@ -17,13 +17,13 @@
         "tsConfigPath": "apps/iot-board-admin-api/tsconfig.app.json"
       }
     },
-    "iot-board-mqtt": {
+    "iot-board-sensors-api": {
       "type": "application",
-      "root": "apps/iot-board-mqtt",
+      "root": "apps/iot-board-sensors-api",
       "entryFile": "main",
-      "sourceRoot": "apps/iot-board-mqtt/src",
+      "sourceRoot": "apps/iot-board-sensors-api/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/iot-board-mqtt/tsconfig.app.json"
+        "tsConfigPath": "apps/iot-board-sensors-api/tsconfig.app.json"
       }
     }
   }

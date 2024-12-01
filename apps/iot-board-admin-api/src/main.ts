@@ -7,7 +7,7 @@ import { Transport } from '@nestjs/microservices';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(cookieParser());
-  app.enableCors({origin: process.env.ORIGINS, credentials: true})
+  app.enableCors({origin: process.env.IOTBRD_ADMIN_API_ORIGINS, credentials: true})
   /* SWAGGER */
   const options = new DocumentBuilder()
     .setTitle('IoT Board Backend')
@@ -15,20 +15,19 @@ async function bootstrap() {
     .setVersion('1.0.0')
     .addTag('projects')
     .addTag('sensors')
-    .addTag('sensors-data')
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
 
   app.connectMicroservice({
-    transport: Transport.TCP,
+    transport: Transport.MQTT,
     options: {
-      host: process.env.ADMIN_API_MS_HOST || 'localhost',
-      port: Number(process.env.ADMIN_API_MS_PORT) || 4000
+      url: process.env.IOTBRD_MICROSERVICES_TRANSPORT_HOST,
+      clientId: 'iotbrd-admin-api'
     }
   })
 
   await app.startAllMicroservices();
-  await app.listen(Number(process.env.APP_PORT) || 3000);
+  await app.listen(Number(process.env.IOTBRD_ADMIN_API_APP_PORT) || 3000);
 }
 bootstrap();
