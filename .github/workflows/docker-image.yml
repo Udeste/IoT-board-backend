@@ -8,9 +8,8 @@ on:
 
 env:
   REGISTRY: ghcr.io/udeste
-  TAG_NAME: ${{ github.head_ref }}
-  ADMIN_IMAGE_NAME: ${{ env.REGISTRY }}/iot-board-admin-api:${{ env.TAG_NAME }}
-  SENSORS_IMAGE_NAME: ${{ env.REGISTRY }}/iot-board-sensors-api:${{ env.TAG_NAME }}
+  ADMIN_IMAGE_NAME: ghcr.io/udeste/iot-board-admin-api:${{ github.head_ref }}
+  SENSORS_IMAGE_NAME: ghcr.io/udeste/iot-board-sensors-api:${{ github.head_ref }}
 
 jobs:
 
