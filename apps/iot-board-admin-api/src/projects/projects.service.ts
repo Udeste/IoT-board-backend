@@ -29,11 +29,14 @@ export class ProjectsService {
     return this.projectRepository.save(newProject)
   }
 
-  async deleteOne(projId: string): Promise<DeleteResult> {
-    return this.projectRepository.delete(projId);
+  async deleteOne(id: string): Promise<Project> {
+    const proj = this.projectRepository.findOneBy({ id });
+    await this.projectRepository.delete(id);
+    return proj;
   }
 
-  async updateOne(updateProjectDto: UpdateProjectDto): Promise<UpdateResult> {
-    return this.projectRepository.update(updateProjectDto.id, updateProjectDto);
+  async updateOne(updateProjectDto: UpdateProjectDto): Promise<Project> {
+    await this.projectRepository.update(updateProjectDto.id, updateProjectDto);
+    return this.projectRepository.findOneBy({ id: updateProjectDto.id });
   }
 }
