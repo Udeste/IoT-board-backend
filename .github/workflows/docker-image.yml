@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Create and publish a Docker image
 
 on:
   push:
@@ -6,18 +6,35 @@ on:
   pull_request:
     branches: [ "main" ]
 
+env:
+  REGISTRY: ghcr.io/udeste
+  ADMIN_IMAGE_NAME: ghcr.io/udeste/iot-board-admin-api:${{ github.head_ref }}
+  SENSORS_IMAGE_NAME: ghcr.io/udeste/iot-board-sensors-api:${{ github.head_ref }}
+
 jobs:
 
-  build-admin-api-microservice:
+  build-admin-api-microservice-image:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image for the admin-api service
-      run: docker build . --file Dockerfile --tag iot-board-admin-api:$(date +%s) --build-arg APP_NAME=iot-board-admin-api
-  
-  build-sensors-api-microservice:
+      run: |
+        docker build . --file Dockerfile --tag ${{ env.ADMIN_IMAGE_NAME }} --build-arg APP_NAME=iot-board-admin-api
+    - name: Publish the Docker image for the admin-api service
+      if: ${{ ! github.event_name == 'pull_request' }}
+      run: |
+        docker login --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+        docker push ${{ env.ADMIN_IMAGE_NAME }}
+
+  build-sensors-api-microservice-image:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image for the sensors-api service
-      run: docker build . --file Dockerfile --tag iot-board-sensors-api:$(date +%s) --build-arg APP_NAME=iot-board-sensors-api
+      run: |
+        docker build . --file Dockerfile --tag ${{ env.SENSORS_IMAGE_NAME }} --build-arg APP_NAME=iot-board-sensors-api
+    - name: Publish the Docker image for the sensors-api service
+      if: ${{ ! github.event_name == 'pull_request' }}
+      run: |
+        docker login --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
+        docker push ${{ env.SENSORS_IMAGE_NAME }}
