@@ -20,17 +20,8 @@ jobs:
     - name: Build the Docker image for the admin-api service
       run: |
         docker build . --file Dockerfile --tag ${{ env.ADMIN_IMAGE_NAME }} --build-arg APP_NAME=iot-board-admin-api
-
-  publish-admin-api-microservice-image:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-      attestations: write
-      id-token: write
-    needs: build-admin-api-microservice-image
-    steps:
     - name: Publish the Docker image for the admin-api service
+      if: ${{ github.event_name == 'pull_request' }}
       run: |
         docker login --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
         docker push ${{ env.ADMIN_IMAGE_NAME }}
