@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InfluxDB, Point } from '@influxdata/influxdb-client'
-import { OrgsAPI, BucketsAPI } from '@influxdata/influxdb-client-apis'
+import { OrgsAPI, BucketsAPI, Buckets } from '@influxdata/influxdb-client-apis'
 
 
 @Injectable()
@@ -33,26 +33,50 @@ export class IotBoardInfluxervice {
   }
 
   async checkAndCreateBucket(bucketName: string) {
-    console.log(`*** Checking bucket: ${bucketName} ***`)
+    console.log(`[INFLUX] Checking bucket "${bucketName}"`)
 
-    let buckets
+    let buckets: Buckets
     try {
       buckets = await this.bucketsAPI.getBuckets({ org: this.influxOrg, name: bucketName })
     } catch {
-      buckets = []
+      buckets = null
     }
 
     if (buckets && buckets.buckets && buckets.buckets.length) {
-      console.log(`*** Bucket named "${bucketName}" already exists ***`)
+      console.log(`[INFLUX] Bucket named "${bucketName}" already exists`)
       return false
     }
 
-    console.log(`*** Create Bucket "${bucketName}" ***`)
+    console.log(`[INFLUX] Create Bucket "${bucketName}"`)
     // creates a bucket, entity properties are specified in the "body" property
     const bucket = await this.bucketsAPI.postBuckets({ body: { orgID: this.influxOrgId, name: bucketName } })
     return bucket
   }
 
+  async deleteBucket(bucketName: string) {
+    console.log(`[INFLUX] Deleting bucket "${bucketName}"`)
+
+    let buckets: Buckets
+    try {
+      buckets = await this.bucketsAPI.getBuckets({ org: this.influxOrg, name: bucketName })
+    } catch {
+      buckets = null
+    }
+
+    let bucketID
+    if (buckets && buckets.buckets && buckets.buckets.length) {
+      console.log(`[INFLUX] Bucket named "${bucketName}" found`)
+      bucketID = buckets.buckets[0].id
+    } else {
+      console.log(`[INFLUX] Bucket named "${bucketName}" not found`)
+      return
+    }
+
+    await this.bucketsAPI.deleteBucketsID({ bucketID: bucketID })
+    console.log(`[INFLUX] Deleted Bucket "${bucketName}"`)
+    return
+  }
+  
   async saveData(bucket: string, payload: { [key: string]: string | number }, tags: { [key: string]: string }) {
     const writeApi = this.influxDB.getWriteApi(this.influxOrg, bucket, 'ms')
 

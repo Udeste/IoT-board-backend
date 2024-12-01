@@ -15,16 +15,15 @@ async function bootstrap() {
     .setVersion('1.0.0')
     .addTag('projects')
     .addTag('sensors')
-    .addTag('sensors-data')
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
 
   app.connectMicroservice({
-    transport: Transport.TCP,
+    transport: Transport.MQTT,
     options: {
-      host: process.env.IOTBRD_ADMIN_API_MS_HOST || 'localhost',
-      port: Number(process.env.IOTBRD_ADMIN_API_MS_PORT) || 4000
+      url: process.env.IOTBRD_MICROSERVICES_TRANSPORT_HOST,
+      clientId: 'iotbrd-admin-api'
     }
   })
 

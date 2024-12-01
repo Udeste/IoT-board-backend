@@ -1,22 +1,17 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { IotBoardMqttService } from './iot-board-mqtt.service'
-import { ClientsModule, Transport } from '@nestjs/microservices';
 import { IotBoardInfluxervice } from './iot-board-influx.service';
+import { IotBoardMqttController } from './iot-board-mqtt.controller';
+import { TransporterModule } from 'libs/shared/modules/transporter/transporter.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    ClientsModule.register([{
-      name: 'ADMIN_API_SERVICE',
-      transport: Transport.TCP,
-      options: {
-        host: process.env.IOTBRD_ADMIN_API_MS_HOST || 'localhost',
-        port: Number(process.env.IOTBRD_ADMIN_API_MS_PORT) || 4000
-      }
-    }]),
+    TransporterModule.forRoot('iotbrd-sensor-client'),
   ],
-  controllers: [],
+  controllers: [IotBoardMqttController],
   providers: [IotBoardMqttService, IotBoardInfluxervice],
+  exports: [IotBoardMqttService]
 })
 export class IotBoardMqttModule { }
