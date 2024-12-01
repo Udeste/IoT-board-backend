@@ -14,7 +14,15 @@ env:
 
 jobs:
 
-  build-admin-api-microservice:
+  build-admin-api-microservice-image:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Docker image for the admin-api service
+      run: |
+        docker build . --file Dockerfile --tag ${{ env.ADMIN_IMAGE_NAME }} --build-arg APP_NAME=iot-board-admin-api
+
+  publish-admin-api-microservice-image:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -22,14 +30,12 @@ jobs:
       attestations: write
       id-token: write
     steps:
-    - uses: actions/checkout@v4
-    - name: Build and publish the Docker image for the admin-api service
+    - name: Publish the Docker image for the admin-api service
       run: |
         docker login --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
-        docker build . --file Dockerfile --tag ${{ env.ADMIN_IMAGE_NAME }} --build-arg APP_NAME=iot-board-admin-api
         docker push ${{ env.ADMIN_IMAGE_NAME }}
 
-  build-sensors-api-microservice:
+  build-sensors-api-microservice-image:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
