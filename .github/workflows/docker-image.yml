@@ -8,8 +8,8 @@ on:
 
 env:
   REGISTRY: ghcr.io/udeste
-  ADMIN_IMAGE_NAME: ghcr.io/udeste/iot-board-admin-api:${{ github.head_ref }}
-  SENSORS_IMAGE_NAME: ghcr.io/udeste/iot-board-sensors-api:${{ github.head_ref }}
+  ADMIN_IMAGE_NAME: ghcr.io/udeste/iot-board-admin-api:${{ github.head_ref || github.ref_name }}
+  SENSORS_IMAGE_NAME: ghcr.io/udeste/iot-board-sensors-api:${{ github.head_ref || github.ref_name }}
 
 jobs:
 
@@ -21,7 +21,7 @@ jobs:
       run: |
         docker build . --file Dockerfile --tag ${{ env.ADMIN_IMAGE_NAME }} --build-arg APP_NAME=iot-board-admin-api
     - name: Publish the Docker image for the admin-api service
-      if: ${{ ! github.event_name == 'pull_request' }}
+      if: ${{ github.event_name != 'pull_request' }}
       run: |
         docker login --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
         docker push ${{ env.ADMIN_IMAGE_NAME }}
@@ -34,7 +34,7 @@ jobs:
       run: |
         docker build . --file Dockerfile --tag ${{ env.SENSORS_IMAGE_NAME }} --build-arg APP_NAME=iot-board-sensors-api
     - name: Publish the Docker image for the sensors-api service
-      if: ${{ ! github.event_name == 'pull_request' }}
+      if: ${{ github.event_name != 'pull_request' }}
       run: |
         docker login --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
         docker push ${{ env.SENSORS_IMAGE_NAME }}
