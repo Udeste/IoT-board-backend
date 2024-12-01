@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 env:
-  REGISTRY: ghcr.io
+  REGISTRY: ghcr.io/udeste
   # IMAGE_NAME: ${{ github.repository }}
 
 jobs:
@@ -24,8 +24,8 @@ jobs:
     - name: Build and publish the Docker image for the admin-api service
       run: |
         docker login --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
-        docker build . --file Dockerfile --tag ${{ env.REGISTRY }}/${{ github.actor }}/iot-board-admin-api:${{ github.ref_name }} --build-arg APP_NAME=iot-board-admin-api
-        docker push ${{ env.REGISTRY }}/${{ github.actor }}/iot-board-admin-api:${{ github.ref_name }}
+        docker build . --file Dockerfile --tag ${{ env.REGISTRY }}/iot-board-admin-api:${{ github.ref_name }} --build-arg APP_NAME=iot-board-admin-api
+        docker push ${{ env.REGISTRY }}/iot-board-admin-api:${{ github.ref_name }}
 
   build-sensors-api-microservice:
     runs-on: ubuntu-latest
