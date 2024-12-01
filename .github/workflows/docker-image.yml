@@ -21,7 +21,7 @@ jobs:
       run: |
         docker build . --file Dockerfile --tag ${{ env.ADMIN_IMAGE_NAME }} --build-arg APP_NAME=iot-board-admin-api
     - name: Publish the Docker image for the admin-api service
-      if: ${{ github.event_name == 'pull_request' }}
+      if: ${{ ! github.event_name == 'pull_request' }}
       run: |
         docker login --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
         docker push ${{ env.ADMIN_IMAGE_NAME }}
@@ -30,8 +30,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Build and publish the Docker image for the sensors-api service
+    - name: Build the Docker image for the sensors-api service
+      run: |
+        docker build . --file Dockerfile --tag ${{ env.SENSORS_IMAGE_NAME }} --build-arg APP_NAME=iot-board-sensors-api
+    - name: Publish the Docker image for the sensors-api service
+      if: ${{ ! github.event_name == 'pull_request' }}
       run: |
         docker login --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}
-        docker build . --file Dockerfile --tag ${{ env.SENSORS_IMAGE_NAME }} --build-arg APP_NAME=iot-board-sensors-api
         docker push ${{ env.SENSORS_IMAGE_NAME }}
